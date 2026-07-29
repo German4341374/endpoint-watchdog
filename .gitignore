@@ -1,0 +1,10 @@
+/bin/
+/coverage
+/coverage.out
+/config.yaml
+*.exe
+*.test
+*.prof
+.idea/
+.vscode/
+.DS_Store
