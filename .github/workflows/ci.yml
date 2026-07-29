@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.26.5"
+          cache: true
+
+      - name: Download and verify modules
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Check formatting
+        run: test -z "$(gofmt -l .)"
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Run tests with race detector
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Build binary
+        run: go build -trimpath -o bin/endpoint-watchdog ./cmd/watchdog
+
+      - name: Upload build and coverage artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: endpoint-watchdog-linux-amd64
+          path: |
+            bin/endpoint-watchdog
+            coverage.out
+          if-no-files-found: error
+          retention-days: 14
+
+  container:
+    name: Container
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: quality
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Build runtime image
+        run: docker build --target runtime --tag endpoint-watchdog:ci .
+
+      - name: Run image smoke test
+        run: docker run --rm endpoint-watchdog:ci -version
+
