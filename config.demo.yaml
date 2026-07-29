@@ -1,0 +1,33 @@
+server:
+  address: "127.0.0.1:18080"
+  title: "Local Service Watchdog"
+  maxConcurrent: 3
+  degradedThreshold: 50ms
+
+retry:
+  attempts: 1
+  initialBackoff: 10ms
+
+endpoints:
+  - name: "User API"
+    url: "http://127.0.0.1:18081/up"
+    method: "GET"
+    expectedStatus: 200
+    timeout: 400ms
+    interval: 5s
+    expectedText: "ready"
+
+  - name: "Reports worker"
+    url: "http://127.0.0.1:18081/slow"
+    method: "GET"
+    expectedStatus: 200
+    timeout: 400ms
+    interval: 5s
+
+  - name: "Billing gateway"
+    url: "http://127.0.0.1:18081/down"
+    method: "GET"
+    expectedStatus: 200
+    timeout: 400ms
+    interval: 5s
+

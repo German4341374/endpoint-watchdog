@@ -1,0 +1,29 @@
+server:
+  address: ":8080"
+  title: "Endpoint Watchdog"
+  maxConcurrent: 4
+  degradedThreshold: 250ms
+
+retry:
+  attempts: 3
+  initialBackoff: 200ms
+
+endpoints:
+  - name: "Watchdog health"
+    url: "http://127.0.0.1:8080/health"
+    method: "GET"
+    expectedStatus: 200
+    timeout: 2s
+    interval: 15s
+    expectedText: '"status":"ok"'
+
+  - name: "Status page"
+    url: "http://127.0.0.1:8080/"
+    method: "GET"
+    expectedStatus: 200
+    timeout: 2s
+    interval: 30s
+    expectedText: "Endpoint Watchdog"
+    headers:
+      Accept: "text/html"
+
