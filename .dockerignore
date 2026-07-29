@@ -1,0 +1,11 @@
+.git
+.github
+bin
+coverage.out
+config.yaml
+docs
+**/*_test.go
+README.md
+CONTRIBUTING.md
+SECURITY.md
+
