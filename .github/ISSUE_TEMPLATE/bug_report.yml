@@ -1,0 +1,24 @@
+name: Bug report
+description: Report a reproducible monitoring or status-page defect.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: Explain the expected and observed behavior.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Safe reproduction
+      description: Use localhost, example.test, or fully redacted configuration.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
