@@ -4,12 +4,12 @@
 [![Go 1.26.5](https://img.shields.io/badge/Go-1.26.5-00ADD8.svg)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Endpoint Watchdog is a compact HTTP monitoring service for support teams and small internal
-systems. It reads targets from YAML, checks them concurrently, retains a bounded in-memory
-history, exposes a JSON API, and serves a responsive status page.
+Put the URLs you want to watch in a YAML file, start the service, and open the status page.
+It checks each URL on a schedule and shows whether it's responding, how long it took,
+and how often it has been available during this run.
 
-It uses the Go standard library for HTTP, concurrency, templates, structured logging, shutdown,
-and tests. The only runtime module dependency is the YAML parser.
+It keeps the last 50 results per endpoint in memory. There's no database, so restarting
+clears that history.
 
 ## Features
 
