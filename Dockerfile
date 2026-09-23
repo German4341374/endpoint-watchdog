@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
     -ldflags="-s -w -X main.version=0.1.0" \
     -o /out/endpoint-watchdog ./cmd/watchdog
 
-FROM alpine:3.23.3 AS runtime
+FROM alpine:3.24.2 AS runtime
 
 RUN addgroup -S -g 10001 watchdog \
     && adduser -S -D -H -u 10001 -G watchdog watchdog
